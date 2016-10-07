@@ -1,0 +1,3 @@
+Implement the persistent vector data type.
+Experiment with the persistent vector and use it in combination with different data types. What do you observe? Why do you observe that behavior? How can it be changed?
+What happens if we pass the pvector around?
