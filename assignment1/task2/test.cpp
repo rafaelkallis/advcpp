@@ -6,13 +6,13 @@
 #include "fraction.cpp"
 
 int main() {
-    Fraction fraction1(1, 2);
-    Fraction fraction2(2, 3);
-    assert((fraction1 + fraction2) == *(new Fraction(7, 6)));
-    assert(fraction2 - fraction1 == *(new Fraction(1, 6)));
-    assert(fraction1 - fraction2 == *(new Fraction(-1, 6)));
-    assert(fraction1 * fraction2 == *(new Fraction(2, 6)));
-    assert(fraction1 / fraction2 == *(new Fraction(3, 4)));
+    fraction fraction1(1, 2);
+    fraction fraction2(2, 3);
+    assert((fraction1 + fraction2) == *(new fraction(7, 6)));
+    assert(fraction2 - fraction1 == *(new fraction(1, 6)));
+    assert(fraction1 - fraction2 == *(new fraction(-1, 6)));
+    assert(fraction1 * fraction2 == *(new fraction(2, 6)));
+    assert(fraction1 / fraction2 == *(new fraction(3, 4)));
     std::cout << "You had a very hard day, had no sleep recently, can't wait for the weekend, but theres one thing you have to do..." << std::endl;
     std::cout << "Fraction operations!!!!!" << std::endl;
     while (true) {

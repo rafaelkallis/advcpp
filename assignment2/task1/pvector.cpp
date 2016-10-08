@@ -2,27 +2,57 @@
 // Created by Rafael Kallis on 29.09.16.
 //
 
-#include "pvector.h"
+#include <vector>
+#include <fstream>
 
 template<typename T>
-void push_back(const T &el) {
-    v.push_back(el);
-}
-
-void pop_back() {
-    v.pop_back();
-}
-void readvector() {
-    ifstream ifs(filename);
-    while(true) {
-        T x;
-        ifs >> x;
-        if (!ifs.good()) break;
-        v.push_back(x);
+class pvector {
+public:
+    pvector(std::string filename) : filename(filename) {
+        if (!exists_file()) { std::cout << "file doesn't exist" << std::endl; }
+        read_vector();
     }
-}
-void writevector() {
-    ofstream ofs(filename);
-    typename vector<T>::iterator fst = v.begin(), lst = v.end();
-    while (fst != lst) ofs << *fst++ << endl;
-}
+
+    ~pvector() {
+        write_vector();
+    }
+
+    void push(const T &arg) {
+        v.push_back(arg);
+    }
+
+    T &pop() {
+        T pop = v.back();
+        v.pop_back();
+        return pop;
+    }
+
+    size_t size() const {
+        return v.size();
+    }
+
+private:
+    std::string filename;
+    std::vector<T> v;
+
+    bool exists_file() {
+        std::ifstream ifs(filename);
+        return ifs.good();
+    }
+
+    void read_vector() {
+        std::ifstream ifs(filename);
+        while (true) {
+            T x;
+            ifs >> x;
+            if (!ifs.good()) break;
+            v.push_back(x);
+        }
+    }
+
+    void write_vector() {
+        std::ofstream ofs(filename);
+        typename std::vector<T>::iterator fst = v.begin(), lst = v.end();
+        while (fst != lst) ofs << *fst++ << std::endl;
+    }
+};
