@@ -6,14 +6,28 @@
 #define ADVCPP_PSET_H
 
 #include <set>
+#include <fstream>
+
+template<typename T>
+class default_trait {
+public:
+    static void write(std::ofstream &ofs, const T &out) {
+        ofs << out << std::endl;
+    }
+    static T read(std::ifstream &ifs) {
+        T in;
+        ifs >> in;
+        return in;
+    }
+};
 
 template<typename T,
-        typename Serialiser,
+        typename Serialiser = default_trait<T>,
         typename _Compare = std::less <T>,
         typename _Allocator = std::allocator <T> >
 class pset {
 public:
-    pset(char *filename) : filename(filename) { read_set(); }
+    pset(std::string filename) : filename(filename) { read_set(); }
 
     ~pset() { write_set(); }
 
@@ -22,11 +36,15 @@ public:
     }
 
     T &find(const T &arg) {
-        s.find(arg);
+        return s.find(arg);
+    }
+
+    int count(const T &arg) {
+        return s.count(arg);
     }
 
 private:
-    char *filename;
+    std::string filename;
     std::set<T, _Compare, _Allocator> s;
 
     void read_set() {

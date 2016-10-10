@@ -2,30 +2,13 @@
 // Created by Rafael Kallis on 10.10.16.
 //
 
+#include "../task1/pset.h"
 #include <unordered_set>
 #include <queue>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <regex>
-
-void read_dictionary(std::string dictionary_file_name, std::unordered_set<std::string> &dictionary) {
-    std::ifstream ifs(dictionary_file_name);
-    while (true) {
-        std::string word;
-        ifs >> word;
-        if (!ifs.good()) break;
-        dictionary.insert(word);
-    }
-    ifs.close();
-}
-
-void write_dictionary(std::string dictionary_file_name, const std::unordered_set<std::string> &new_words ) {
-    std::ofstream ofs(dictionary_file_name, std::ofstream::app);
-    typename std::unordered_set<std::string>::iterator fst = new_words.begin(), lst = new_words.end();
-    while (fst != lst) ofs << *fst++ << std::endl;
-    ofs.close();
-}
 
 void write_file(std::string file_name, const std::string content){
     std::ofstream file_ofs(file_name);
@@ -54,9 +37,8 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     std::string file_name(argv[1]), dictionary_file_name(argv[2]), checked_content;
-    std::unordered_set<std::string> dictionary, new_words, ignored_words;
-
-    read_dictionary(dictionary_file_name, dictionary);
+    pset<std::string> dictionary(dictionary_file_name);
+    std::unordered_set<std::string> ignored_words;
 
     std::ifstream file_ifs(file_name);
     std::string word;
@@ -75,7 +57,6 @@ int main(int argc, char *argv[]) {
             std::cin >> option;
             switch (option) {
                 case 'a':
-                    new_words.insert(word);
                     dictionary.insert(word);
                     break;
                 case 'r':
@@ -89,7 +70,7 @@ int main(int argc, char *argv[]) {
                 default:
                     break;
             }
-            std::cout << std::endl << std::endl;
+            std::cout << std::endl;
         }
 
         if (starts_with_capital) capitalise(word);
@@ -101,6 +82,5 @@ int main(int argc, char *argv[]) {
 
     write_file(file_name, checked_content);
 
-    write_dictionary(dictionary_file_name, new_words);
     return 0;
 }
