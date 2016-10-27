@@ -51,8 +51,9 @@ public:
                     v.push_back(temp1 / temp2);
 
                 } else if(!std::strcmp(token, "m")) {
-                    pop_last(v, temp1, temp2);
-                    v.push_back(temp1 < temp2 ? temp1 : temp2);
+                    T _min = v.back();
+                    std::for_each(v.begin(), v.end(), [&](T &cur){ _min = _min < cur ? _min : cur; });
+                    std::cout << "Minimum is " << _min << std::endl;
                 }
                 token = std::strtok(NULL, " ");
             }

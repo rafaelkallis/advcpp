@@ -56,6 +56,10 @@ public:
                     temp1 = pv->pop();
                     pv->push(temp1 / temp2);
 
+                }else if(!std::strcmp(token, "m")) {
+                    pop_last(v, temp1, temp2);
+                    pv->push(temp1 < temp2 ? temp1 : temp2);
+                    std::for_each(nums.begin(), nums.end(), [](int &n){ n++; });
                 }
                 token = std::strtok(NULL, " ");
             }
