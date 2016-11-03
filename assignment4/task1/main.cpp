@@ -35,11 +35,15 @@ int main() {
     v2.push_back(4);
 
 
+//    container_merger<int,
+//            std::vector<int>,
+//            vector_control<int>,
+//            std::vector<int>,
+//            vector_control<int>,
+//            std::vector<int>,
+//            vector_control<int>>::merge(v1, v2, o);
+
     container_merger<int,
-            std::vector<int>,
-            vector_control<int>,
-            std::vector<int>,
-            vector_control<int>,
             std::vector<int>,
             vector_control<int>>::merge(v1, v2, o);
 

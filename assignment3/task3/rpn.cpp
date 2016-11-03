@@ -5,12 +5,12 @@
 #include <vector>
 #include <sstream>
 #include <iostream>
-#include "../../assignment1/task2/fraction.cpp"
+#include "../../assignment1/task2/fraction.h"
 
 template<typename T>
 class rpn {
 public:
-    rpn(T (*parse)(char *)) : parse(parse) {}
+    rpn() {}
 
     ~rpn() {}
 
@@ -18,44 +18,46 @@ public:
         bool run = true;
         while (run) {
             T temp1, temp2;
-            char line[256];
-            std::cout << "[ q, n[0-9]*, d, +, -, *, /]*" << std::endl;
-            std::cin.getline(line, 256);
-            char *token = std::strtok(line, " ");
-            while (token) {
-                if (!std::strcmp(token, "q")) {
+            std::cout << "[ q, n ::input::, d, +, -, *, /, m]*" << std::endl;
+            std::string token, line;
+            std::getline(std::cin, line);
+            std::istringstream iss(line);
+            while (iss.good()) {
+                iss >> token;
+                if (token == "q") {
                     run = false;
                     break;
 
-                } else if (!std::strcmp(token, "n")) {
-                    token = std::strtok(NULL, " ");
-                    v.push_back(parse(token));
+                } else if (token == "n") {
+                    if (iss.bad()) throw std::runtime_error("no input");
+                    iss >> temp1;
+                    v.push_back(temp1);
 
-                } else if (!std::strcmp(token, "d") && v.size()) {
+                } else if (token == "d" && v.size()) {
                     std::cout << pop(v) << std::endl;
 
-                } else if (!std::strcmp(token, "+")) {
+                } else if (token == "+") {
                     pop_last(v, temp1, temp2);
                     v.push_back(temp1 + temp2);
 
-                } else if (!std::strcmp(token, "-")) {
+                } else if (token == "-") {
                     pop_last(v, temp1, temp2);
                     v.push_back(temp1 - temp2);
 
-                } else if (!std::strcmp(token, "*")) {
+                } else if (token == "*") {
                     pop_last(v, temp1, temp2);
                     v.push_back(temp1 * temp2);
 
-                } else if (!std::strcmp(token, "/")) {
+                } else if (token == "/") {
                     pop_last(v, temp1, temp2);
                     v.push_back(temp1 / temp2);
 
-                } else if(!std::strcmp(token, "m")) {
+                } else if (token == "m") {
                     T _min = v.back();
                     std::for_each(v.begin(), v.end(), [&](T &cur){ _min = _min < cur ? _min : cur; });
-                    std::cout << "Minimum is " << _min << std::endl;
+                    v.clear();
+                    v.push_back(_min);
                 }
-                token = std::strtok(NULL, " ");
             }
         }
     }
@@ -63,13 +65,10 @@ public:
 private:
     std::vector<T> v;
 
-    T (*parse)(char *);
-
     void pop_last(std::vector<T> &v, T &before_last, T &last) {
         typename std::vector<T>::iterator lst = v.end();
         last = *--lst;
         before_last = *--lst;
-        lst = v.erase(lst);
         lst = v.erase(lst);
     }
 
@@ -81,36 +80,13 @@ private:
     }
 };
 
-int parse_int(char *string) {
-    return std::stoi(string);
-}
-
-/**
- * Fraction in the form of <int>/<int>, e.g 1/3, 4/3, ...
- * @param string
- * @return
- */
-fraction parse_fraction(char *string) {
-    int del_index = std::strcspn(string, "/");
-    int end_index = std::strlen(string);
-    char nom_string[del_index + 1];
-    char denom_string[end_index - del_index];
-
-    std::strncpy(nom_string, string, del_index + 1);
-    nom_string[del_index] = '\0';
-
-    std::strncpy(denom_string, string + del_index + 1, end_index - del_index);
-    denom_string[end_index - del_index - 1] = '\0';
-
-    int nom = std::stoi(nom_string);
-    int denom = std::stoi(denom_string);
-    fraction f(nom, denom);
-    return f;
-}
-
 int main() {
-    rpn<int> r(parse_int);
-//    rpn<fraction> r(parse_fraction);
+//    rpn<int> r;
+    rpn<fraction> r;
     r.start();
     return 0;
 }
+
+
+
+

@@ -5,6 +5,19 @@
 #ifndef TRAIT_BASE
 #define TRAIT_BASE
 
+template<typename T>
+class default_trait {
+public:
+    static void write(std::ofstream &ofs, const T &out) {
+        ofs << out << std::endl;
+    }
+    static T read(std::ifstream &ifs) {
+        T in;
+        ifs >> in;
+        return in;
+    }
+};
+
 class int_trait {
 public:
     static void write(std::ofstream &ofs, const int &out) {

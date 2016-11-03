@@ -5,6 +5,7 @@
 #include <vector>
 #include <sstream>
 #include <iostream>
+#include <sstream>
 
 void pop_last(std::vector<double> &v, double &before_last, double &last) {
     typename std::vector<double>::iterator lst = v.end();
@@ -26,40 +27,41 @@ void start_rpn_calc() {
     bool run = true;
     while (run) {
         double temp1, temp2;
-        char line[256];
-        std::cout << "[ q, n[0-9]*, d, +, -, *, /]*" << std::endl;
-        std::cin.getline(line, 256);
-        char * token = std::strtok(line, " ");
-        while (token) {
-            if (!std::strcmp(token, "q")) {
+        std::cout << "[ q, n ::double::, d, +, -, *, /])*" << std::endl;
+        std::string line, token;
+        std::getline(std::cin, line);
+        std::istringstream iss(line);
+        while (iss.good()) {
+            iss >> token;
+            if (token == "q") {
                 run = false;
                 break;
 
-            } else if (!std::strcmp(token, "n")) {
-                token = std::strtok(NULL, " ");
+            } else if (token == "n") {
+                if (iss.bad()) throw std::runtime_error("no input");
+                iss >> token;
                 v.push_back(std::stoi(token));
 
-            } else if (!std::strcmp(token, "d") && v.size()) {
+            } else if (token == "d" && v.size()) {
                 std::cout << pop(v) << std::endl;
 
-            } else if (!std::strcmp(token, "+")) {
+            } else if (token == "+") {
                 pop_last(v, temp1, temp2);
                 v.push_back(temp1 + temp2);
 
-            } else if (!std::strcmp(token, "-")) {
+            } else if (token == "-") {
                 pop_last(v, temp1, temp2);
                 v.push_back(temp1 - temp2);
 
-            } else if (!std::strcmp(token, "*")) {
+            } else if (token == "*") {
                 pop_last(v, temp1, temp2);
                 v.push_back(temp1 * temp2);
 
-            } else if (!std::strcmp(token, "/")) {
+            } else if (token == "/") {
                 pop_last(v, temp1, temp2);
                 v.push_back(temp1 / temp2);
 
             }
-            token = std::strtok(NULL, " ");
         }
     }
 }

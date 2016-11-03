@@ -1,5 +1,5 @@
 #include <iostream>
-#include "assignment2/task1/pvector.cpp"
+#include "assignment2/task1/pvector.h"
 
 template <typename T>
 void foo(pvector<T> & p){
@@ -7,7 +7,7 @@ void foo(pvector<T> & p){
 }
 
 int main() {
-    pvector<int> p("assignment2/task1/data");
+    pvector<int> p("assignment2/task1/data_int");
     foo(p);
 
     return 0;

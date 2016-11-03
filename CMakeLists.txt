@@ -3,5 +3,5 @@ project(advcpp)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES assignment4/task1/main.cpp)
+set(SOURCE_FILES assignment4/task2/find_if.cpp)
 add_executable(advcpp ${SOURCE_FILES})

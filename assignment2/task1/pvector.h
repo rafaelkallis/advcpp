@@ -21,7 +21,7 @@ public:
         v.push_back(arg);
     }
 
-    T &pop() {
+    T pop() {
         T pop = v.back();
         v.pop_back();
         return pop;
@@ -42,10 +42,12 @@ private:
 
     void read_vector() {
         std::ifstream ifs(filename);
+        std::string line;
         while (true) {
+            std::getline(ifs, line);
+            if (line.empty()) break;
             T x;
-            ifs >> x;
-            if (!ifs.good()) break;
+            std::stringstream(line) >> x;
             v.push_back(x);
         }
     }

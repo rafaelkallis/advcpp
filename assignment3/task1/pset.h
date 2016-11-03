@@ -7,19 +7,8 @@
 
 #include <set>
 #include <fstream>
+#include "trait_base.h"
 
-template<typename T>
-class default_trait {
-public:
-    static void write(std::ofstream &ofs, const T &out) {
-        ofs << out << std::endl;
-    }
-    static T read(std::ifstream &ifs) {
-        T in;
-        ifs >> in;
-        return in;
-    }
-};
 
 template<typename T,
         typename Serialiser = default_trait<T>,

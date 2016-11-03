@@ -5,78 +5,74 @@
 #include <vector>
 #include <sstream>
 #include <iostream>
-#include "../task1/pvector.cpp"
+#include "../task1/pvector.h"
+#include "../../assignment1/task2/fraction.h"
 
 template<typename T>
 class rpn {
 public:
-    rpn(T (*parse)(char *), std::string filename) : parse(parse) {
-        pv = new pvector<int>(filename);
-    }
+    rpn(std::string filename) : pv(pvector<T>(filename)) {}
 
-    ~rpn() {delete pv;}
+    ~rpn() {}
 
     void start() {
         bool run = true;
         while (run) {
             T temp1, temp2;
-            char line[256];
-            std::cout << "[ q, n[0-9]*, d, +, -, *, /]*" << std::endl;
-            std::cin.getline(line, 256);
-            char *token = std::strtok(line, " ");
-            while (token) {
-                if (!std::strcmp(token, "q")) {
+            std::cout << "[ q, n ::input::, d, +, -, *, /, m]*" << std::endl;
+            std::string token, line;
+            std::getline(std::cin, line);
+            std::istringstream iss(line);
+            while (iss.good()) {
+                iss >> token;
+                if (token == "q") {
                     run = false;
                     break;
 
-                } else if (!std::strcmp(token, "n")) {
-                    token = std::strtok(NULL, " ");
-                    pv->push(parse(token));
+                } else if (token == "n") {
+                    if (iss.bad()) throw std::runtime_error("no input");
+                    iss >> temp1;
+                    pv.push(temp1);
 
-                } else if (!std::strcmp(token, "d") && pv->size()) {
-                    std::cout << pv->pop() << std::endl;
+                } else if (token == "d" && pv.size()) {
+                    std::cout << pv.pop() << std::endl;
 
-                } else if (!std::strcmp(token, "+")) {
-                    temp2 = pv->pop();
-                    temp1 = pv->pop();
-                    pv->push(temp1 + temp2);
+                } else if (token == "+") {
+                    temp2 = pv.pop();
+                    temp1 = pv.pop();
+                    pv.push(temp1 + temp2);
 
-                } else if (!std::strcmp(token, "-")) {
-                    temp2 = pv->pop();
-                    temp1 = pv->pop();
-                    pv->push(temp1 - temp2);
+                } else if (token == "-") {
+                    temp2 = pv.pop();
+                    temp1 = pv.pop();
+                    pv.push(temp1 - temp2);
 
-                } else if (!std::strcmp(token, "*")) {
-                    temp2 = pv->pop();
-                    temp1 = pv->pop();
-                    pv->push(temp1 * temp2);
+                } else if (token == "*") {
+                    temp2 = pv.pop();
+                    temp1 = pv.pop();
+                    pv.push(temp1 * temp2);
 
-                } else if (!std::strcmp(token, "/")) {
-                    temp2 = pv->pop();
-                    temp1 = pv->pop();
-                    pv->push(temp1 / temp2);
+                } else if (token == "/") {
+                    temp2 = pv.pop();
+                    temp1 = pv.pop();
+                    pv.push(temp1 / temp2);
 
-                }else if(!std::strcmp(token, "m")) {
-                    pop_last(v, temp1, temp2);
-                    pv->push(temp1 < temp2 ? temp1 : temp2);
-                    std::for_each(nums.begin(), nums.end(), [](int &n){ n++; });
+                } else if(token == "m") {
+                    temp2 = pv.pop();
+                    temp1 = pv.pop();
+                    pv.push(temp1 < temp2 ? temp1 : temp2);
                 }
-                token = std::strtok(NULL, " ");
             }
         }
     }
 
 private:
-    pvector<T> * pv;
-    T (*parse)(char *);
+    pvector<T> pv;
 };
 
-int parse_int(char *string) {
-    return std::stoi(string);
-}
-
 int main() {
-    rpn<int> r(parse_int, "assignment2/task5/data");
+    rpn<int> r("assignment2/task5/data_int");
+//    rpn<fraction> r("assignment2/task5/data_fraction");
     r.start();
     return 0;
 }
